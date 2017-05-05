@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<userOverrides>
+  <override>
+    <path>C:\LY\project\&#x8F6F;&#x4eF6;&#x6A21;&#x677F;\STM32FreeRTOS\HalDriver\src\halPowerKey.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x8F6F;&#x4eF6;&#x6A21;&#x677F;\STM32FreeRTOS\User\src\main.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\HalDriver\src\halADC12.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\HalDriver\src\halBeep.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\HalDriver\src\halButton.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\HalDriver\src\halInfrared.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\HalDriver\src\halMPU9250.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\HalDriver\src\halSPI.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\HalDriver\src\halTIM3.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\HalDriver\src\halUltraSound.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\HalDriver\src\halnRF24L01P.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\User\src\DEMOTask.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\User\src\RADIOTask.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\User\src\bottomBoard.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\User\src\communication.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\User\src\localization.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\User\src\main.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>C:\LY\project\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\User\src\radio.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>E:\Working Folder\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\HalDriver\src\halUltraSound.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>E:\Working Folder\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\HalDriver\src\halnRF24L01P.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>E:\Working Folder\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\User\src\basicMotion.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>E:\Working Folder\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\User\src\bottomBoard.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>E:\Working Folder\&#x667A;&#x80FD;&#x8F66;&#x63A7;\&#x673A;&#x5668;&#x4eBA;&#x65B0;&#x7248;&#x672C;&#x8F6F;&#x4eF6;\V2.0&#x8F6F;&#x4eF6;\robotTop\rtos\User\src\radio.c</path>
+    <encoding>System</encoding>
+  </override>
+</userOverrides>
+
+

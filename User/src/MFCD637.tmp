@@ -1,0 +1,103 @@
+#include "basicMotion.h"
+#include "ultraSound.h"
+#include "bottomBoard.h"
+#include "math.h"
+
+
+
+type_coordinate RobotGetPosition(void){
+  int32_t d1, d2;
+  type_coordinate  tc;
+  
+  d1 = GetDistance(1);
+  d2 = GetDistance(2);
+  
+  tc.y = (d1*d1 - d2*d2 + DISTANCE_B1_2_B2*DISTANCE_B1_2_B2)/(2*DISTANCE_B1_2_B2);
+  tc.x = sqrt(d1*d1 - DISTANCE_B1_2_B2*DISTANCE_B1_2_B2 - tc.y*tc.y);
+  
+  return tc;
+}
+
+void RobotGoStrait(int16_t ls, int16_t rs) {
+  SetRobotSpeed(ls, rs);
+}
+
+void RobotGoCircleLeft(int16_t s, uint16_t r) {
+  int16_t sl, sr;
+  sl = s-(DIS_WHEEL_2_WHEEL>>2)/r;
+  sr = s+(DIS_WHEEL_2_WHEEL>>2)/r;
+  SetRobotSpeed(sl, sr);
+}
+
+void RobotGoCircleRight(int16_t s, uint16_t r) {
+  int16_t sl, sr;
+  sl = s+(DIS_WHEEL_2_WHEEL>>2)/r;
+  sr = s-(DIS_WHEEL_2_WHEEL>>2)/r;
+  SetRobotSpeed(sl, sr);
+}
+
+void RobotGoTo(uint16_t x, uint16_t y) {
+  
+}
+////////////////////////////////////////////////////////////////////////////////
+//顺时针为正方向, 逆时针为负方向
+////////////////////////////////////////////////////////////////////////////////
+void RobotRotate(int16_t s, int16_t angle) {
+  static uint32_t waitTime=0;
+  int16_t sl, sr, sm;
+  int32_t ang;
+  
+  SetRobotSpeed(0, 0);
+  
+  if (s<0) {
+    sm = -s;
+  }
+  else {
+    sm = s;
+  }
+  
+  if (angle>0) {
+    sl = s;
+    sr = -s;
+    ang = angle;
+  }
+  else {
+    ang = -angle;
+    sl = -s;
+    sr = s;
+  }
+  
+  waitTime = (uint32_t)(310*ang/sm);
+  
+  SetRobotSpeed(sl, sr);
+  vTaskDelay(waitTime);
+  SetRobotSpeed(0, 0);
+  asm("NOP");
+}
+
+void RobotTowardDst(int32_t x, int32_t y) {
+  type_coordinate cp;
+  int64_t edge;
+  int32_t diffX, disX;
+  cp = RobotGetPosition();
+  
+  
+  
+  
+  
+  
+}
+
+void RobotFollowLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+
+}
+
+void RobotFollowCircle(uint16_t x, uint16_t y, uint16_t r, int16_t s) {
+
+}
+
+
+void RobotFindObstacle(void) {
+  
+}
+

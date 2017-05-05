@@ -1,0 +1,48 @@
+#include "vLEDTask.h"
+#include "halBeep.h"
+#include "halADC12.h"
+#include "halSPI.h"
+
+void vLEDTask( void *pvParameters )  {
+  while(1)  {   
+    /*
+    static uint16_t adcRes[1000];
+    static uint16_t ap=0;
+    
+    adcRes[ap++] = halADC1GetData(2);
+    if (ap==1000) {
+      ap = 0;
+    }
+    */
+    vTaskDelay(250);
+    //halBeepOn(1);
+    //vTaskDelay(2);
+    //halBeepOff();
+    
+
+    
+    /*
+    vTaskDelay(2);
+    
+    static uint8_t status=Bit_RESET;
+    if (GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_3) != status) {
+      
+      status = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_3);
+      halSetLedStatus(LED_RED, LED_TOGGLE);
+    }
+    */
+    //halSetLedStatus(LED_RED, LED_TOGGLE);
+  }
+}
+
+void EXTI3ISR(void){
+
+}
+
+void EXTI4ISR(void){
+  
+}
+
+void EXTI5ISR(void){
+
+}

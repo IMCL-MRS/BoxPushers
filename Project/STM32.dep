@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project>
+  <fileVersion>2</fileVersion>
+  <fileChecksum>2878786971</fileChecksum>
+  <configuration>
+    <name>Debug</name>
+    <outputs>
+      <file>$PROJ_DIR$\..\User\inc\radio.h</file>
+      <file>$PROJ_DIR$\..\User\inc\stm32f10x_conf.h</file>
+      <file>$PROJ_DIR$\..\User\src\bottomBoard.c</file>
+      <file>$PROJ_DIR$\..\User\inc\ultraSound.h</file>
+      <file>$PROJ_DIR$\..\User\src\BCASTTask.c</file>
+      <file>$PROJ_DIR$\..\User\inc\systemConfig.h</file>
+      <file>$PROJ_DIR$\..\User\inc\RADIOTask.h</file>
+      <file>$PROJ_DIR$\..\User\src\CRC16.c</file>
+      <file>$PROJ_DIR$\..\User\src\CRC8.c</file>
+      <file>$PROJ_DIR$\..\User\inc\FreeRTOSConfig.h</file>
+      <file>$PROJ_DIR$\..\User\src\basicMotion.c</file>
+      <file>$PROJ_DIR$\..\User\inc\stm32f10x_it.h</file>
+      <file>$PROJ_DIR$\..\User\src\ultraSound.c</file>
+      <file>$PROJ_DIR$\..\User\src\main.c</file>
+      <file>$PROJ_DIR$\..\User\src\DEMOTask.c</file>
+      <file>$PROJ_DIR$\..\User\src\RADIOTask.c</file>
+      <file>$PROJ_DIR$\..\User\src\radio.c</file>
+      <file>$PROJ_DIR$\..\User\src\stm32f10x_it.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\hal24LC02B.h</file>
+      <file>$PROJ_DIR$\..\..\..\&#x8F66;&#x8F7D;&#x79F0;&#x91CD;\&#x6C49;&#x5FB7;&#x79D1;&#x6280;\&#x8F6F;&#x4eF6;\&#x663e;&#x793A;\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h</file>
+      <file>$PROJ_DIR$\..\CMSIS\CM3\DeviceSupport\ST\STM32F10x\system_stm32f10x.c</file>
+      <file>$PROJ_DIR$\..\CMSIS\CM3\CoreSupport\core_cm3.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halLed.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halMCUWait.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halADC12.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halI2C.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halTIM3.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halButton.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halI2S.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halBeep.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halSPI.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halUltraSound.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halInfrared.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\hal24LC02B.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halBeep.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halADC12.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halnRF24L01P.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halMCUWait.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halButton.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halI2C.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halInfrared.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halMPU9250.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halI2S.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\inc\halLed.h</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halTIM3.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halMPU9250.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halUltraSound.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halSPI.c</file>
+      <file>$PROJ_DIR$\..\HalDriver\src\halnRF24L01P.c</file>
+      <file>$PROJ_DIR$\..\User\inc\bottomBoard.h</file>
+      <file>$PROJ_DIR$\..\User\inc\CRC8.h</file>
+      <file>$PROJ_DIR$\..\User\inc\DEMOTask.h</file>
+      <file>$PROJ_DIR$\..\User\inc\basicMotion.h</file>
+      <file>$PROJ_DIR$\..\User\inc\BCASTTask.h</file>
+      <file>$PROJ_DIR$\..\User\inc\CRC16.h</file>
+    </outputs>
+  </configuration>
+  <configuration>
+    <name>Release</name>
+    <outputs/>
+    <forcedrebuild>
+      <name>[MULTI_TOOL]</name>
+      <tool>ILINK</tool>
+    </forcedrebuild>
+  </configuration>
+</project>
+
+
