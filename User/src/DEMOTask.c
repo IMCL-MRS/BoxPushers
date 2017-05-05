@@ -24,7 +24,7 @@ void DEMOTask( void *pvParameters ){
   bool obstacleFind = false;
   uint8_t infSensor, bat1248;
   int16_t sL,sR;
-  while (1) {
+  for(;;) {
     
     SetRobotSpeed(50, 50);
     type_coordinate tp;
@@ -53,8 +53,7 @@ void DEMOTask( void *pvParameters ){
       SetRobotSpeed(50, 50);
       vTaskDelay(1000);
     }
-    else  {
-      // obstacle is found
+    else  { // obstacle is found
       // Shan
         // rotate until nothing ahead and something leftside
         while ( (infSensor & 0x80) || !(infSensor & 0x2) || !(infSensor & 0x4) ) {
@@ -78,7 +77,7 @@ void DEMOTask( void *pvParameters ){
         for (;;) {
           // Go straight a little bit
           SetRobotSpeed(10, 10);
-          vTaskDelay(1200);
+          vTaskDelay(1100);
           SetRobotSpeed(0, 0);
         
           // turn left 90 degree
@@ -94,15 +93,15 @@ void DEMOTask( void *pvParameters ){
           }
           SetRobotSpeed(0, 0);
           
-          // go straight for 1s
+          // go straight for 0.5s
           SetRobotSpeed(10, 10);
-          vTaskDelay(1000);
+          vTaskDelay(500);
           
           // go straight until nothing leftside
           SetRobotSpeed(10, 10);
-          uint8_t flag = 0;
+          bool flag = false;
           while (infSensor & 0x2) {
-            vTaskDelay(100);
+            vTaskDelay(50);
             while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
               vTaskDelay(20);
             }
@@ -116,7 +115,7 @@ void DEMOTask( void *pvParameters ){
             if (infSensor & 64) cnt ++;
             if (infSensor & 128) cnt ++;
             if (cnt > 5) {
-              flag = 1;
+              flag = true;
               break;
             }
           }
@@ -126,128 +125,45 @@ void DEMOTask( void *pvParameters ){
           }
         }
         halBeepOn(2100);
-        vTaskDelay(20000);
-        SetRobotSpeed(10, 10);
-        vTaskDelay(2000);
+        vTaskDelay(20);
+        halBeepOff();
         SetRobotSpeed(0, 0);
-        for (;;)
+        // Push the box outside
+        SetRobotSpeed(30, 30);
+        for (;;) {
+          tp = RobotGetPosition();
+          if((tp.x <= 130) || (tp.y <= 15) || (tp.x >= 210) || (tp.y >= 125)) {
+            break;
+          }
+          vTaskDelay(100);
+        }
+        SetRobotSpeed(0, 0);
+        halBeepOn(2100);
+        vTaskDelay(50);
+        halBeepOff();
+        // Rotate until nothing backward
+        for (;;) {
+          while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+            vTaskDelay(20);
+          }
+          if (!(infSensor & 8) ) {
+            break;
+          }
+          RobotRotate(5, 10);
+        }
+        // Go back for 14cm
+        SetRobotSpeed(-20, -20);
+        vTaskDelay(10000);
+        // beep forever
+        halBeepOn(2100);
+        vTaskDelay(50);
+        halBeepOff();
+        SetRobotSpeed(0, 0);
+        for(;;)
           vTaskDelay(1000);
       // End-Shan
-      SetRobotSpeed(5, -5);
-      while ((infSensor&0x80)==0) {
-        vTaskDelay(100);
-        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248)==0){
-          vTaskDelay(20);
-        }
-      }
-      SetRobotSpeed(20, 20);
-      vTaskDelay(1000);
-      SetRobotSpeed(-5, 5);
-      while ((infSensor&0x40)==0) {
-        vTaskDelay(100);
-        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248)==0){
-          vTaskDelay(20);
-        }
-      }
-      SetRobotSpeed(20, 20);
-      while (infSensor!=0) {
-        vTaskDelay(100);
-        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248)==0){
-          vTaskDelay(20);
-        }
-      }
-      RobotRotate(20, 90);
-      SetRobotSpeed(20, 20);
-      vTaskDelay(1000);
-      while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248)==0){
-        vTaskDelay(20);
-      }
-      
-      while (infSensor!=0) {
-        vTaskDelay(100);
-        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248)==0){
-          vTaskDelay(20);
-        }
-      }
-      
-      vTaskDelay(10000);
     }
-    
-        
-    
   }
-/*
-  while (1) {
-    int16_t r2North;
-    vTaskDelay(1000);
-    SetRobotSpeed(5, -5);
-    r2North = RobotAngle2North();
-    while ((r2North<-60) || (r2North>-50)) {
-      vTaskDelay(100);
-      r2North = RobotAngle2North();
-    }
-    SetRobotSpeed(0, 0);
-    
-    SetRobotSpeed(50, 50);
-    
-    while (RobotInRange(130,10, 210,125)==true) {
-      vTaskDelay(200);
-    }
-    
-    halBeepOn(3951);
-    vTaskDelay(20);
-    halBeepOff();
-    
-    SetRobotSpeed(0, 0);
-    vTaskDelay(200000);
-  }
-*/  
-  
-  /*   
-  vTaskDelay(1000);
-  
-  int16_t cxt, cyt;
-  while(halMPU9250RdCompassX(&cxt)==0) {
-    vTaskDelay(5);
-  }
-  while(halMPU9250RdCompassY(&cyt)==0) {
-    vTaskDelay(5);
-  }
-  vTaskDelay(1000);
-  
-  while(1) {
-    
-    
- 
-    portTickType xLastWakeTime; 
-    xLastWakeTime = xTaskGetTickCount(); 
-    int16_t angleDiff;
-
-    if (RobotInRange(130,10, 210,140)==false) {
-      vTaskDelay(200);
-    }
-    halBeepOn(2093);
-    vTaskDelay(20);
-    halBeepOff();
-    while (1){
-      vTaskDelay(200);
-      angleDiff = RobotTowardDst(165*49.5f/35,70*49/55);
-    }
-    SetRobotSpeed(50, 50);
-    
-    while (RobotInRange(130,10, 210, 140)==false) {
-      vTaskDelay(200);
-    }
-    
-    SetRobotSpeed(0, 0);
-    
-    halBeepOn(3951);
-    vTaskDelay(20);
-    halBeepOff();
-    
-    vTaskDelayUntil(&xLastWakeTime, 1000000);  
-  }
-    */
 }
 
 
