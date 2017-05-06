@@ -1,5 +1,6 @@
 #include "BCASTTask.h"
 #include "halBeep.h"
+#include "basicMotion.h"
 
 
 extern xQueueHandle xQueueHandleRFTx;
@@ -19,6 +20,7 @@ void BCASTTask( void *pvParameters ){
     while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
       vTaskDelay(20);
     }
+    type_coordinate tp = RobotGetPosition();
     //p->speedL = GetRobotSpeedLeft();
     //p->speedR = GetRobotSpeedRight();
     
@@ -31,9 +33,9 @@ void BCASTTask( void *pvParameters ){
     p->speedL = sL;
     p->speedR = sR;
     p->infSensor = infSensor;
-    p->dir    = 0;
-    p->locationX = 0;
-    p->locationY = 0;
+    p->dir    = RobotAngle2North();
+    p->locationX = tp.x;
+    p->locationY = tp.y;
     p->crc16Res = CRC16(tx, sizeof(type_RFPacket)-2);
     
     while (xQueueSendToBack(xQueueHandleRFTx, tx, portMAX_DELAY)!=pdPASS)  {
