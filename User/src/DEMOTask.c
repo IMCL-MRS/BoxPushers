@@ -19,8 +19,9 @@
 #include "CRC16.h"
 
 void vPushBoxTask( void *pvParameters){
-   static int16_t angle ;
-   angle = RobotAngle2North();
+  SetRobotSpeed(0,0);
+  vTaskDelay(2000);
+   RobotTowardDst(167, 73);
    asm("NOP");
    while(1)
      vTaskDelay(100);

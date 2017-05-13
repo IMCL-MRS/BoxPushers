@@ -1,10 +1,11 @@
 #include "basicMotion.h"
 #include "ultraSound.h"
 #include "bottomBoard.h"
-#include "math.h"
+#include <math.h>
 #include "halMPU9250.h"
-#include "stdlib.h"
+#include <stdlib.h>
 #include "halBeep.h"
+#include "BCASTTask.h"
 
 #define __PI 3.14159265354
 //0到180度的cos表
@@ -246,7 +247,7 @@ void RobotGoTo(uint16_t x, uint16_t y) {
   SetRobotSpeed(0, 0);
 }
 ////////////////////////////////////////////////////////////////////////////////
-//顺时针为正方向, 逆时针为负方向
+//顺时针为-方向, 逆时针为+方向
 ////////////////////////////////////////////////////////////////////////////////
 void RobotRotate(int16_t s, int16_t angle) {
   static uint32_t waitTime=0;
@@ -263,14 +264,14 @@ void RobotRotate(int16_t s, int16_t angle) {
   }
   
   if (angle>0) {
-    sl = s;
-    sr = -s;
+    sl = -s;
+    sr = s;
     ang = angle;
   }
   else {
     ang = -angle;
-    sl = -s;
-    sr = s;
+    sl = s;
+    sr = -s;
   }
   
   waitTime = (uint32_t)(310*ang/sm);
@@ -281,63 +282,32 @@ void RobotRotate(int16_t s, int16_t angle) {
   asm("NOP");
 }
 
-#define ANGLE_COORDINATE_NORTH   (60)
-int16_t RobotTowardDst(int32_t x, int32_t y) {
-  type_coordinate cp;
-  int32_t edge;
-  int32_t disY, disX;
-  int16_t angCoor;
-  float acosValue;
-  uint16_t i;
-  int16_t r2North;
-  int16_t rotateAngle=0;
+int16_t RobotTowardDst(int32_t x, int32_t y) {  
+  type_coordinate cp = RobotGetPosition();
   
-  cp = RobotGetPosition();
+  int32_t disX = x - cp.x;
+  int32_t disY = y - cp.y;
   
-  disX = x - cp.x;
-  disY = y - cp.y;
+  float edge = sqrt(disX*disX + disY*disY);
   
-  edge = (int32_t)(sqrt(disX*disX + disY*disY));
-  
-  acosValue = (float)disX/edge;
-  
-  for (i=0; i<sizeof(cosTable); i++) {
-    if (acosValue >= cosTable[i]){
-      break;
-    }
+  int16_t tarAng = (int16_t)(acos(disX/edge) * 180 / __PI);
+  if (disY < 0) {
+    tarAng = 360 - tarAng;
   }
-  angCoor = i;
+ 
+  int16_t r2North = CalibrateNorth2X();
   
-  if (disY<0) {
-    angCoor = angCoor;
+  int16_t rotateAngle =  tarAng - r2North;
+  if (rotateAngle < 0) {
+    rotateAngle += 360;
   }
-  else {
-    angCoor = -angCoor;
+  if (rotateAngle > 180) {
+    rotateAngle = 360 - rotateAngle;
+    RobotRotate(20, -rotateAngle);
+  } else {
+    RobotRotate(20, rotateAngle);
   }
-  
-  r2North = RobotAngle2North();
-  
-  //修正机器人头向指北角到X轴正方向角 
-  r2North = r2North + ANGLE_COORDINATE_NORTH;
-  
-  if (r2North>=180) {
-    r2North = r2North-360;
-  }
-  
-  rotateAngle = angCoor-r2North;
-  
-  if (rotateAngle > 180)  {
-    rotateAngle = rotateAngle-360;
-  }
-  
-  if (rotateAngle < -180)  {
-    rotateAngle = rotateAngle+360;
-  }
-  
-  RobotRotate(20, rotateAngle);
-  
-  asm ("NOP");
-  return rotateAngle;
+  return 0;
 }
 
 void RobotFollowLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
@@ -411,7 +381,7 @@ int16_t RobotAngle2North(void) {
   return angle;
 }
 
-int16_t ReadAngle2North_Shan() {
+int16_t ReadAngle2North() {
   float edgeLong=0;
   int16_t compX=0, compY=0;
   float angleReturn;
@@ -438,7 +408,7 @@ int16_t ReadAngle2North_Shan() {
 
 //0 - 360
 int16_t CalibrateNorth2X(void){
-  int16_t nAngle = ReadAngle2North_Shan();
+  int16_t nAngle = ReadAngle2North();
   nAngle += 208;
   if (nAngle > 360) nAngle -= 360;
   return nAngle;

@@ -18,7 +18,7 @@ TypeViolation=1
 UnspecRange=1
 ActionState=1
 [DebugChecksum]
-Checksum=1312065870
+Checksum=-2135812345
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -114,8 +114,8 @@ SumSortOrder=0
 [Disassemble mode]
 mode=0
 [Breakpoints2]
-Bp0=_ 0 "EMUL_CODE" "{$PROJ_DIR$\..\User\src\DEMOTask.c}.654.1" 0 0 1 "" 0 "" 0
-Bp1=_ 0 "EMUL_CODE" "0x080007DE" 0 0 1 "" 0 "" 0
+Bp0=_ 0 "EMUL_CODE" "0x080007DE" 0 0 1 "" 0 "" 0
+Bp1=_ 1 "EMUL_CODE" "{$PROJ_DIR$\..\User\src\DEMOTask.c}.25.4" 0 0 1 "" 0 "" 0
 Count=2
 [Log file]
 LoggingEnabled=_ 0

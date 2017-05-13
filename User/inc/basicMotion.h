@@ -44,6 +44,6 @@ extern bool RobotInRange(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
 extern int16_t RobotAngle2North(void);
 extern int16_t CalibrateNorth2X(void);
 extern int16_t RobotTowardDst(int32_t x, int32_t y);
-
+extern int16_t ReadAngle2North();
 #endif
 
