@@ -23,8 +23,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //机器人头方向与北方夹角-180 到 180度, 顺时针为正
 ////////////////////////////////////////////////////////////////////////////////
-#define COMPASS_X_CALI_PARA        (48.5f)
-#define COMPASS_Y_CALI_PARA        (-123.5f)
+#define COMPASS_X_CALI_PARA        (25.0f)
+#define COMPASS_Y_CALI_PARA        (-161.0f)
+#define MAG_RATIO                  (388/454.0);
+
+
+//#define COMPASS_X_CALI_PARA        (129.0f)
+//#define COMPASS_Y_CALI_PARA        (382.0f)
 
 typedef struct type_coordinate{
   int32_t x;
@@ -37,6 +42,7 @@ extern void RobotGoCircleLeft(int16_t s, uint16_t r);
 extern void RobotRotate(int16_t s, int16_t angle);
 extern bool RobotInRange(int32_t x1, int32_t y1, int32_t x2, int32_t y2);
 extern int16_t RobotAngle2North(void);
+extern int16_t CalibrateNorth2X(void);
 extern int16_t RobotTowardDst(int32_t x, int32_t y);
 
 #endif

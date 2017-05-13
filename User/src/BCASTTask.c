@@ -33,7 +33,7 @@ void BCASTTask( void *pvParameters ){
     p->speedL = sL;
     p->speedR = sR;
     p->infSensor = infSensor;
-    p->dir    = RobotAngle2North();
+    p->dir    = CalibrateNorth2X();
     p->locationX = tp.x;
     p->locationY = tp.y;
     p->crc16Res = CRC16(tx, sizeof(type_RFPacket)-2);

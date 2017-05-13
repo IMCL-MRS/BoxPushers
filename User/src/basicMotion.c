@@ -5,6 +5,8 @@
 #include "halMPU9250.h"
 #include "stdlib.h"
 #include "halBeep.h"
+
+#define __PI 3.14159265354
 //0到180度的cos表
 const float cosTable[] = {
 1.0f,
@@ -377,7 +379,7 @@ int16_t RobotAngle2North(void) {
   }
   
   cxt = cxt - COMPASS_X_CALI_PARA;
-  cyt = cyt - COMPASS_Y_CALI_PARA;
+  cyt = (cyt - COMPASS_Y_CALI_PARA)*MAG_RATIO;
   
   edge = sqrt(cxt*cxt + cyt*cyt);
   //1. 避免acos无法计算
@@ -409,6 +411,46 @@ int16_t RobotAngle2North(void) {
   return angle;
 }
 
-                  
+int16_t ReadAngle2North_Shan() {
+  float edgeLong=0;
+  int16_t compX=0, compY=0;
+  float angleReturn;
+  
+  while(halMPU9250RdCompassX(&compX)==0) {
+    vTaskDelay(5);
+  }
+  
+  while(halMPU9250RdCompassY(&compY)==0) {
+    vTaskDelay(5);
+  }
+  compX = (float)(compX-COMPASS_X_CALI_PARA);
+  compY = (float)(compY-COMPASS_Y_CALI_PARA)*MAG_RATIO;
+  
+  edgeLong= sqrt(compX*compX + compY*compY);     
+  angleReturn = ((180/__PI)*acos(compY/edgeLong));
+  
+  if (compX > 0){    
+    angleReturn=0-angleReturn;
+  }   
+
+  return (int16_t)(angleReturn);
+}
+
+//0 - 360
+int16_t CalibrateNorth2X(void){
+  int16_t nAngle = ReadAngle2North_Shan();
+  nAngle += 208;
+  if (nAngle > 360) nAngle -= 360;
+  return nAngle;
+}
+
+void rotateToNorthAngle(int16_t tar, int16_t speed) {
+  int16_t ang = 0;
+  ang = tar - CalibrateNorth2X();
+  if (ang < -180) ang += 360 ;
+  if (ang > 180) ang -= 360;
+  RobotRotate(speed, ang);
+}
+
                   
                   

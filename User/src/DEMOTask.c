@@ -18,6 +18,14 @@
 #include "basicMotion.h"
 #include "CRC16.h"
 
+void vPushBoxTask( void *pvParameters){
+   static int16_t angle ;
+   angle = RobotAngle2North();
+   asm("NOP");
+   while(1)
+     vTaskDelay(100);
+}
+
 void DEMOTask( void *pvParameters ){
   SetRobotSpeed(0, 0);
   vTaskDelay(1000);
@@ -211,11 +219,6 @@ void COORDINATECALITask(void *pvParameters) {
     
   }
 }
-
-
-
-
-
 
 
 #define CC_BUF_SIZE   (1000)

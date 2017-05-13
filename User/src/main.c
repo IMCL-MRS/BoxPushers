@@ -64,7 +64,7 @@ int main(void) {
   
   //extern void COMPASS_Task( void *pvParameters ) ;
   //xTaskCreate(COMPASS_Task,    ( signed portCHAR * ) "LED",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );   
-  xTaskCreate( DEMOTask,    ( signed portCHAR * ) "LED",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
+  xTaskCreate( vPushBoxTask,    ( signed portCHAR * ) "LED",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
   
   vTaskStartScheduler();
   
