@@ -223,106 +223,6 @@ type_coordinate RobotGetPosition(void){
   return tc;
 }
 
-void RobotGoStrait(int16_t ls, int16_t rs) {
-  SetRobotSpeed(ls, rs);
-}
-
-void RobotGoCircleLeft(int16_t s, uint16_t r) {
-  int16_t sl, sr;
-  sl = s-(DIS_WHEEL_2_WHEEL>>2)/r;
-  sr = s+(DIS_WHEEL_2_WHEEL>>2)/r;
-  SetRobotSpeed(sl, sr);
-}
-
-void RobotGoCircleRight(int16_t s, uint16_t r) {
-  int16_t sl, sr;
-  sl = s+(DIS_WHEEL_2_WHEEL>>2)/r;
-  sr = s-(DIS_WHEEL_2_WHEEL>>2)/r;
-  SetRobotSpeed(sl, sr);
-}
-
-void RobotGoTo(uint16_t x, uint16_t y) {
-  RobotTowardDst(x,y);
-  RobotGoStrait(50, 50);  
-  SetRobotSpeed(0, 0);
-}
-////////////////////////////////////////////////////////////////////////////////
-//顺时针为-方向, 逆时针为+方向
-////////////////////////////////////////////////////////////////////////////////
-void RobotRotate(int16_t s, int16_t angle) {
-  static uint32_t waitTime=0;
-  int16_t sl, sr, sm;
-  int32_t ang;
-  
-  SetRobotSpeed(0, 0);
-  
-  if (s<0) {
-    sm = -s;
-  }
-  else {
-    sm = s;
-  }
-  
-  if (angle>0) {
-    sl = -s;
-    sr = s;
-    ang = angle;
-  }
-  else {
-    ang = -angle;
-    sl = s;
-    sr = -s;
-  }
-  
-  waitTime = (uint32_t)(310*ang/sm);
-  
-  SetRobotSpeed(sl, sr);
-  vTaskDelay(waitTime);
-  SetRobotSpeed(0, 0);
-  asm("NOP");
-}
-
-int16_t RobotTowardDst(int32_t x, int32_t y) {  
-  type_coordinate cp = RobotGetPosition();
-  
-  int32_t disX = x - cp.x;
-  int32_t disY = y - cp.y;
-  
-  float edge = sqrt(disX*disX + disY*disY);
-  
-  int16_t tarAng = (int16_t)(acos(disX/edge) * 180 / __PI);
-  if (disY < 0) {
-    tarAng = 360 - tarAng;
-  }
- 
-  int16_t r2North = CalibrateNorth2X();
-  
-  int16_t rotateAngle =  tarAng - r2North;
-  if (rotateAngle < 0) {
-    rotateAngle += 360;
-  }
-  if (rotateAngle > 180) {
-    rotateAngle = 360 - rotateAngle;
-    RobotRotate(20, -rotateAngle);
-  } else {
-    RobotRotate(20, rotateAngle);
-  }
-  return 0;
-}
-
-void RobotFollowLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
-  
-}
-
-void RobotFollowCircle(uint16_t x, uint16_t y, uint16_t r, int16_t s) {
-
-}
-
-
-void RobotFindObstacle(void) {
-  
-}
-
 bool RobotInRange(int32_t x1, int32_t y1, int32_t x2, int32_t y2) {
   type_coordinate tp;
   
@@ -332,53 +232,6 @@ bool RobotInRange(int32_t x1, int32_t y1, int32_t x2, int32_t y2) {
     return true;
   }
   return false;
-}
-
-int16_t RobotAngle2North(void) {
-  float edge, acosValue;
-  int16_t cxt, cyt;
-  uint16_t i;
-  int16_t angle;
-  
-  while(halMPU9250RdCompassX(&cxt)==0) {
-    vTaskDelay(5);
-  }
-  
-  while(halMPU9250RdCompassY(&cyt)==0) {
-    vTaskDelay(5);
-  }
-  
-  cxt = cxt - COMPASS_X_CALI_PARA;
-  cyt = (cyt - COMPASS_Y_CALI_PARA)*MAG_RATIO;
-  
-  edge = sqrt(cxt*cxt + cyt*cyt);
-  //1. 避免acos无法计算
-  if (fabs(cxt) > edge) {
-    if (cxt>0) {
-      return 180;
-    }
-    if (cxt<0) {
-      return 0;
-    }
-  }
-  
-  //2. 查表角度
-  acosValue = (float)cxt/edge;
-  
-  for (i=0; i<sizeof(cosTable); i++) {
-    if (acosValue >= cosTable[i]){
-      break;
-    }
-  }
-  
-  if (cyt < 0) {
-    angle = i-180;
-  }
-  else {
-    angle = 180-i;
-  }
-
-  return angle;
 }
 
 int16_t ReadAngle2North() {
@@ -421,6 +274,172 @@ void rotateToNorthAngle(int16_t tar, int16_t speed) {
   if (ang > 180) ang -= 360;
   RobotRotate(speed, ang);
 }
+           
+void RobotGoStrait(int16_t ls, int16_t rs) {
+  SetRobotSpeed(ls, rs);
+}
 
-                  
+void RobotGoCircleLeft(int16_t s, uint16_t r) {
+  int16_t sl, sr;
+  sl = s-(DIS_WHEEL_2_WHEEL>>2)/r;
+  sr = s+(DIS_WHEEL_2_WHEEL>>2)/r;
+  SetRobotSpeed(sl, sr);
+}
+
+void RobotGoCircleRight(int16_t s, uint16_t r) {
+  int16_t sl, sr;
+  sl = s+(DIS_WHEEL_2_WHEEL>>2)/r;
+  sr = s-(DIS_WHEEL_2_WHEEL>>2)/r;
+  SetRobotSpeed(sl, sr);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//顺时针为-方向, 逆时针为+方向
+////////////////////////////////////////////////////////////////////////////////
+void RobotRotate(int16_t s, int16_t angle) {
+  static uint32_t waitTime=0;
+  int16_t sl, sr, sm;
+  int32_t ang;
+  
+  SetRobotSpeed(0, 0);
+  
+  if (s<0) {
+    sm = -s;
+  }
+  else {
+    sm = s;
+  }
+  
+  if (angle>0) {
+    sl = -s;
+    sr = s;
+    ang = angle;
+  }
+  else {
+    ang = -angle;
+    sl = s;
+    sr = -s;
+  }
+  
+  waitTime = (uint32_t)(310*ang/sm);
+  
+  SetRobotSpeed(sl, sr);
+  vTaskDelay(waitTime);
+  SetRobotSpeed(0, 0);
+  asm("NOP");
+}
+
+int16_t GotInsectAngle(int32_t x, int32_t y){
+  type_coordinate cp = RobotGetPosition();
+  
+  int32_t disX = x - cp.x;
+  int32_t disY = y - cp.y;
+  
+  float edge = sqrt(disX*disX + disY*disY);
+  
+  int16_t tarAng = (int16_t)(acos(disX/edge) * 180 / __PI); //y轴对称
+  if (disY < 0) {
+    tarAng = 360 - tarAng;
+  }
+ 
+  int16_t r2North = CalibrateNorth2X();
+  
+  int16_t rotateAngle =  tarAng - r2North;
+  if (rotateAngle < 0) {
+    rotateAngle += 360;
+  }
+  if (rotateAngle > 180) {
+    rotateAngle = 360 - rotateAngle;
+    rotateAngle = -rotateAngle;
+  } else {
+    rotateAngle = rotateAngle;  
+  }
+  return rotateAngle;
+}
+
+int16_t RobotTowardDst(int32_t x, int32_t y,int16_t s) {    
+  int16_t rotateAngle = GotInsectAngle(x,y);
+  RobotRotate(s, rotateAngle);
+  return rotateAngle;
+}
+
+int8_t whichSide(int32_t x, int32_t y){
+  type_coordinate cp = RobotGetPosition();  
+  int32_t disX = x - cp.x;
+  int32_t disY = y - cp.y;
+  
+  float edge = sqrt(disX*disX + disY*disY);  
+  int16_t tarAng = (int16_t)(acos(disX/edge) * 180 / __PI); //y轴对称
+  if (disY < 0) {
+    tarAng = 360 - tarAng;
+  }
+ 
+  int16_t r2North = CalibrateNorth2X();
+  
+  int16_t rotateAngle =  tarAng - r2North;
+  if(abs(rotateAngle) < 20){
+     if(rotateAngle < 0 ){
+      return 1;
+    }else if(rotateAngle > 0){
+      return -1;
+    }
+  }else{
+      RobotRotate(30, rotateAngle);
+  }  
+  return 0;
+}
+
+int16_t getDistance(int32_t Ax, int32_t Ay, int32_t Bx, int32_t By) {
+  return sqrt( (Ax-Bx)*(Ax-Bx) + (Ay-By)*(Ay-By));
+}
+
+int8_t GoalInFront(int32_t x, int32_t y){
+  type_coordinate nowp = RobotGetPosition();
+  int16_t dist = getDistance(nowp.x, nowp.y, x,y);
+  if( dist < 2)
+    return 1;
+  else
+    return 0;
+}
+
+void GotoWaypoint(int32_t x, int32_t y) {
+  RobotTowardDst(x,y,30);
+  RobotTowardDst(x,y,10);
+  while(1){
+    RobotGoStrait(50, 50);  
+    vTaskDelay(200);
+    if(GoalInFront(x,y)){
+      break;
+    }
+    int side = whichSide(x,y);
+    if(side == 1){
+      RobotGoStrait(45, 50);
+    }else if(side == -1){
+      RobotGoStrait(50, 45);
+    }else{
+      RobotGoStrait(50, 50);
+    }
+    vTaskDelay(100); 
+    if(GoalInFront(x,y)){
+      break;
+    }
+  }  
+  SetRobotSpeed(0, 0);
+}
+
+
+void RobotFollowLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
+  
+}
+
+void RobotFollowCircle(uint16_t x, uint16_t y, uint16_t r, int16_t s) {
+
+}
+
+
+void RobotFindObstacle(void) {
+  
+}
+
+      
                   

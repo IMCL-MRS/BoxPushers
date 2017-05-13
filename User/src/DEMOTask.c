@@ -21,7 +21,7 @@
 void vPushBoxTask( void *pvParameters){
   SetRobotSpeed(0,0);
   vTaskDelay(2000);
-   RobotTowardDst(167, 73);
+  GotoWaypoint(167, 73);
    asm("NOP");
    while(1)
      vTaskDelay(100);
