@@ -66,13 +66,25 @@ void vPushLineTask( void *pvParameters){
           RobotRotate(20,-30);
           SetRobotSpeed(50, 50);
           vTaskDelay(2000);
+          if(!RobotInRange(130,15,210,125)){
+            SetRobotSpeed(0, 0);
+            vTaskDelay(200000);
+         }
         }else if((infSensor & 0x1) && !(infSensor & 0x80)){
           RobotRotate(20, 30);
           SetRobotSpeed(50, 50);
           vTaskDelay(2000);
+          if(!RobotInRange(130,15,210,125)){
+            SetRobotSpeed(0, 0);
+            vTaskDelay(200000);
+         }
         }else if((infSensor & 0x80) && (infSensor & 0x1)&& (infSensor & 0x40)){
           SetRobotSpeed(50, 50);
           vTaskDelay(2000);
+          if(!RobotInRange(130,15,210,125)){
+            SetRobotSpeed(0, 0);
+            vTaskDelay(200000);
+         }
         }else{
           RobotRotate(20, 30);
           cnt++;
