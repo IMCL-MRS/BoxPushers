@@ -18,13 +18,79 @@
 #include "basicMotion.h"
 #include "CRC16.h"
 
-void vPushBoxTask( void *pvParameters){
+
+bool obsLineFind = false;
+
+void gotoPointTest(void *pvParameters){
   SetRobotSpeed(0,0);
   vTaskDelay(2000);
-  GotoWaypoint(167, 73);
-   asm("NOP");
+  GotoWaypoint(170,35);
+  asm("NOP");
+  while(1)
+    vTaskDelay(100);
+}
+
+void infSensorTest( void *pvParameters){
+   SetRobotSpeed(0,0);
    while(1)
-     vTaskDelay(100);
+    vTaskDelay(100);
+}
+
+void vPushLineTask( void *pvParameters){
+  SetRobotSpeed(0,0);
+  vTaskDelay(2000);
+  uint8_t infSensor, bat1248;
+  int16_t sL, sR;
+  type_coordinate shapPoints[32];
+  for(;;) { // break if obstacle found
+    while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248)==0){
+      vTaskDelay(20);
+    }
+    if (infSensor) { // obstacle found, beep
+      SetRobotSpeed(0, 0);
+      halBeepOn(3951);
+      vTaskDelay(20);
+      halBeepOff();
+      obsLineFind = true;
+      
+      // Go straight a little bit
+      SetRobotSpeed(10, 10);
+      vTaskDelay(2000);
+      int cnt = 0;
+      for(;;){     
+///////////      
+        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248)==0){
+          vTaskDelay(20);
+        }
+        if(!(infSensor & 0x1) && (infSensor & 0x80)){
+          RobotRotate(20,-30);
+          SetRobotSpeed(50, 50);
+          vTaskDelay(2000);
+        }else if((infSensor & 0x1) && !(infSensor & 0x80)){
+          RobotRotate(20, 30);
+          SetRobotSpeed(50, 50);
+          vTaskDelay(2000);
+        }else if((infSensor & 0x80) && (infSensor & 0x1)&& (infSensor & 0x40)){
+          SetRobotSpeed(50, 50);
+          vTaskDelay(2000);
+        }else{
+          RobotRotate(20, 30);
+          cnt++;
+          if(cnt > 13){
+            break;
+          }         
+        }  
+///////////        
+      }   
+    }else{
+         SetRobotSpeed(50, 50);
+         vTaskDelay(1000);
+         if(!RobotInRange(130,15,210,125)){
+           RobotRotate(20, 90);
+         }
+    } 
+  }
+  asm("NOP");
 }
 
 void DEMOTask( void *pvParameters ){
@@ -185,9 +251,6 @@ void DEMOTask( void *pvParameters ){
     }
   }
 }
-
-
-
 
 typedef struct type_coPacket{
   uint16_t id;

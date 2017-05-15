@@ -8,6 +8,8 @@ extern xQueueHandle xQueueHandleRFTx;
 void BCASTTask( void *pvParameters ){
   while (1) {
     uint8_t tx[32];
+    uint8_t infSensor, bat1248;
+    int16_t sL, sR;
     
     portTickType xLastWakeTime; 
     xLastWakeTime = xTaskGetTickCount(); 
@@ -15,8 +17,7 @@ void BCASTTask( void *pvParameters ){
     type_RFPacket* p = (type_RFPacket*)tx;
     
     p->id = ROBOT_ID;
-    uint8_t infSensor, bat1248;
-    int16_t sL, sR;
+
     while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
       vTaskDelay(20);
     }

@@ -9,7 +9,7 @@ static int16_t  sl=0, sr=0;
 static uint8_t  batV1248=0;
 
 uint8_t spi1EXTBroken=0;
-
+//infra-red sensor, left speed, right speed,battery
 uint8_t GetRobotBStatus(uint8_t* infSensor, int16_t* sL, int16_t* sR, uint8_t* bat1248) {
   uint8_t slL,slH,srL,srH;
   uint8_t txBuf[7];

@@ -405,19 +405,29 @@ int8_t GoalInFront(int32_t x, int32_t y){
 void GotoWaypoint(int32_t x, int32_t y) {
   RobotTowardDst(x,y,30);
   RobotTowardDst(x,y,10);
+  SetRobotSpeed(20, 20);  
+  vTaskDelay(200);
+  if(GoalInFront(x,y)){
+    return;
+  }
+  SetRobotSpeed(40, 40);  
+  vTaskDelay(200);
+  if(GoalInFront(x,y)){
+    return;
+  }
   while(1){
-    RobotGoStrait(50, 50);  
+    SetRobotSpeed(50, 50);  
     vTaskDelay(200);
     if(GoalInFront(x,y)){
       break;
     }
     int side = whichSide(x,y);
     if(side == 1){
-      RobotGoStrait(45, 50);
+      SetRobotSpeed(45, 50);
     }else if(side == -1){
-      RobotGoStrait(50, 45);
+      SetRobotSpeed(50, 45);
     }else{
-      RobotGoStrait(50, 50);
+      SetRobotSpeed(50, 50);
     }
     vTaskDelay(100); 
     if(GoalInFront(x,y)){

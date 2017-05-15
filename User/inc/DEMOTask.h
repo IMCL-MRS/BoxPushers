@@ -8,10 +8,11 @@
 #include "halLed.h"
 
 extern void DEMOTask( void *pvParameters );
-extern void vPushBoxTask( void *pvParameters);
+extern void vPushLineTask( void *pvParameters);
 extern void BEEP_DEMOTask( void *pvParameters );
 extern void COMPASSCALITask(void *pvParameters);
 extern void COORDINATECALITask(void *pvParameters) ;
 
-
+extern void infSensorTest( void *pvParameters);
+extern void gotoPointTest(void *pvParameters);
 #endif
