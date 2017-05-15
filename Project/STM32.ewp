@@ -2244,6 +2244,9 @@
       <file>
         <name>$PROJ_DIR$\..\User\inc\ultraSound.h</name>
       </file>
+      <file>
+        <name>$PROJ_DIR$\..\User\inc\vMagTask.h</name>
+      </file>
     </group>
     <group>
       <name>src</name>
@@ -2279,6 +2282,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\User\src\ultraSound.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\User\src\vMagTask.c</name>
       </file>
     </group>
   </group>

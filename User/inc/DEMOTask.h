@@ -6,6 +6,7 @@
 #include "semphr.h"
 
 #include "halLed.h"
+#include "vMagTask.h"
 
 extern void DEMOTask( void *pvParameters );
 extern void vPushLineTask( void *pvParameters);

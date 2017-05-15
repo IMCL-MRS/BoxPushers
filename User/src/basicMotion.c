@@ -234,6 +234,7 @@ bool RobotInRange(int32_t x1, int32_t y1, int32_t x2, int32_t y2) {
   return false;
 }
 
+
 int16_t ReadAngle2North() {
   float edgeLong=0;
   int16_t compX=0, compY=0;
@@ -436,6 +437,7 @@ void GotoWaypoint(int32_t x, int32_t y) {
   }  
   SetRobotSpeed(0, 0);
 }
+
 
 
 void RobotFollowLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2) {
