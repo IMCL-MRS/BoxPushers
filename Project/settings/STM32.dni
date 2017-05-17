@@ -18,7 +18,7 @@ TypeViolation=1
 UnspecRange=1
 ActionState=1
 [DebugChecksum]
-Checksum=3385727
+Checksum=2023861119
 [Exceptions]
 StopOnUncaught=_ 0
 StopOnThrow=_ 0
@@ -86,14 +86,6 @@ Fmt7={W}1:regValue[1]	4	0
 Fmt8={W}1:status	4	0
 Fmt9={W}1:whoAmI	4	0
 Fmt10={W}1:wmi	4	0
-[CallStackLog]
-Enabled=0
-[DriverProfiling]
-Enabled=0
-Mode=3
-Graph=0
-Symbiont=0
-Exclusions=
 [Trace2]
 Enabled=0
 ShowSource=0
@@ -138,3 +130,11 @@ A2=_ "D:\项目相关\项目\拉伸测力仪器\软件低频采样\FreeRtosCode\CMSIS\Core\CM3\sta
 A3=_ "D:\项目相关\项目\拉伸测力仪器\软件低频采样\FreeRtosCode\FreeRTOSV7.2.0\portable\IAR\ARM_CM3\portasm.s" ""
 Count=4
 SuppressDialog=1
+[CallStackLog]
+Enabled=0
+[DriverProfiling]
+Enabled=0
+Mode=3
+Graph=0
+Symbiont=0
+Exclusions=

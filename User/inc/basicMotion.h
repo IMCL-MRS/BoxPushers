@@ -23,17 +23,31 @@
 ////////////////////////////////////////////////////////////////////////////////
 //机器人头方向与北方夹角-180 到 180度, 顺时针为正
 ////////////////////////////////////////////////////////////////////////////////
+#define ROBOT_3
+
+#ifdef ROBOT_1
 #define COMPASS_X_CALI_PARA        (25.0f)
 #define COMPASS_Y_CALI_PARA        (-161.0f)
-#define MAG_RATIO                  (388/454.0);
+#define MAG_RATIO                  (388/454.0f)
+#endif // ROBOT_1
+#ifdef ROBOT_3
+#define COMPASS_X_CALI_PARA        (-46.5f)
+#define COMPASS_Y_CALI_PARA        (227.5f)
+#define MAG_RATIO                  (347/471.0f)
+#endif // ROBOT_3
 
+#ifdef ROBOT_4
+#define COMPASS_X_CALI_PARA        (64.5f)
+#define COMPASS_Y_CALI_PARA        (0)
+#define MAG_RATIO                  (363/418.0f)
+#endif // ROBOT_4
 
 //#define COMPASS_X_CALI_PARA        (129.0f)
 //#define COMPASS_Y_CALI_PARA        (382.0f)
 
 typedef struct type_coordinate{
-  int32_t x;
-  int32_t y;
+  int16_t x;
+  int16_t y;
 }type_coordinate;
 
 extern type_coordinate RobotGetPosition(void);
@@ -47,5 +61,7 @@ extern int16_t RobotTowardDst(int32_t x, int32_t y,int16_t s);
 extern int16_t ReadAngle2North();
 extern void GotoWaypoint(int32_t x, int32_t y);
 extern int8_t whichSide(int32_t x, int32_t y);
+extern int16_t getStatus();
+extern int16_t setStatus(int16_t _status);
 #endif
 

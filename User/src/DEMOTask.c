@@ -18,6 +18,37 @@
 #include "basicMotion.h"
 #include "CRC16.h"
 
+#include "BCASTTask.h"
+
+#define mymin(a,b) ((a)<(b)?(a):(b))
+#define mymax(a,b) ((a)<(b)?(b):(a))
+#define myabs(a) ((a)<0?(-(a)):(a))
+
+#pragma pack(push)
+#pragma pack(1)
+typedef struct type_ShapePacket{
+  uint16_t id;
+  type_coordinate a;
+  type_coordinate b;
+  type_coordinate c;
+  type_coordinate d;
+}type_ShapePacket;
+#pragma pack(pop)
+
+void sendShapePacket(type_coordinate a, type_coordinate b, type_coordinate c, type_coordinate d) {
+  extern xQueueHandle xQueueHandleRFTx;
+  uint8_t tx[32];
+  type_ShapePacket* p = (type_ShapePacket*)tx;
+  p->id = ROBOT_ID + 100;
+  p->a = a;
+  p->b = b;
+  p->c = c;
+  p->d = d;
+  while (xQueueSendToBack(xQueueHandleRFTx, tx, portMAX_DELAY)!=pdPASS)  {
+    vTaskDelay(5);
+  }
+  halSetLedStatus(LED_YELLOW, LED_TOGGLE);
+}
 
 bool obsLineFind = false;
 
@@ -27,12 +58,6 @@ void gotoPointTest(void *pvParameters){
   GotoWaypoint(170,35);
   asm("NOP");
   while(1)
-    vTaskDelay(100);
-}
-
-void infSensorTest( void *pvParameters){
-   SetRobotSpeed(0,0);
-   while(1)
     vTaskDelay(100);
 }
 
@@ -102,15 +127,149 @@ void vPushLineTask( void *pvParameters){
          }
     } 
   }
-  asm("NOP");
 }
-
-void DEMOTask( void *pvParameters ){
+// robot 2 doesn't work well
+// for robot 3
+void IPusherShanTask(void *pvParameters) {
+  SetRobotSpeed(0, 0);
+  vTaskDelay(1000);
+  bool obstacleFind = false;
+  bool shapeFind = false;
+  uint8_t infSensor, bat1248, cnt;
+  int16_t sL,sR;
+  type_coordinate tp;
+  type_coordinate shape[10];
+  uint8_t shapeindex = 0;
+  for(;;) {
+    for(;;) { // break if obstacle found
+      while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248)==0){
+        vTaskDelay(20);
+      }
+      if (infSensor & 0x80) { // obstacle found infront, beep
+        SetRobotSpeed(0, 0);
+        halBeepOn(3951);
+        vTaskDelay(20);
+        halBeepOff();
+        obstacleFind = true;
+        break;
+      }
+      tp = RobotGetPosition();
+      if ( (tp.x > 130) && (tp.y > 15) && (tp.x < 210) && (tp.y < 125) ){
+        SetRobotSpeed(50, 50);
+        vTaskDelay(200);
+      } else {
+        RobotRotate(20, 120);
+        SetRobotSpeed(50, 50);
+        vTaskDelay(1000);
+      }
+    }
+    // obstacle is found, try to find shape
+    // go straight a little bit, the infra 0x80 is too sensitive
+    SetRobotSpeed(50, 50);
+    vTaskDelay(350);
+    SetRobotSpeed(0, 0);
+    for(;;) {
+      // rotate until nothing ahead and something rightside
+      cnt = 0;
+      SetRobotSpeed(5, -5);
+      while ( (infSensor & 0x80) || !(infSensor & 0x2) ) {
+        vTaskDelay(50);
+        cnt ++;
+        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+          vTaskDelay(20);
+        }
+        if (cnt > (uint8_t)2000) { // 2000 should be considered carefully, approximate 360 degree
+          SetRobotSpeed(0, 0);
+          obstacleFind = false;
+          break;
+        }
+      }
+      SetRobotSpeed(0, 0);
+      if (obstacleFind == false) { // sensor error, find obstacle again
+        break;
+      }
+      RobotRotate(20, -30);
+      SetRobotSpeed(0, 0);
+      
+      // go straight until nothing rightside
+      SetRobotSpeed(10, 10);
+      while ( (infSensor & 0x2) ) {
+        vTaskDelay(50);
+        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+          vTaskDelay(20);
+        }
+      }
+      SetRobotSpeed(0, 0);
+      
+      shapeindex = 0;
+      type_coordinate now, pre;
+      for (;;) {
+        // Go straight a little bit
+        SetRobotSpeed(10, 10);
+        vTaskDelay(2000);
+        SetRobotSpeed(0, 0);
+        now = RobotGetPosition();
+        pre = shape[ (shapeindex-4+10) % 10];
+        if (myabs(now.x-pre.x) < 20 && myabs(now.y-pre.y) < 20 ) {
+          shapeFind = true;
+          //sendShapePacket(shape[ (shapeindex-3+10) % 10], shape[ (shapeindex-2+10) % 10], shape[ (shapeindex-1+10) % 10], now);
+          break;
+        }
+        if (shapeFind) {
+          break;
+        }
+        shape[shapeindex] = now;
+        shapeindex ++;
+        if (shapeindex >= 10) {
+          //sendShapePacket(shape[6], shape[7], shape[8], shape[9]);
+          shapeindex -= 10;
+        }
+        // turn left 90 degree
+        RobotRotate(20, 90);
+        SetRobotSpeed(0, 0);
+        
+        // go directly until something leftside
+        SetRobotSpeed(10, 10);
+        while (!(infSensor & 0x2) ) {
+          vTaskDelay(50);
+          while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+            vTaskDelay(20);
+          }
+        }
+        halBeepOn(2100);
+        vTaskDelay(50);
+        halBeepOff();
+        vTaskDelay(500);
+        
+        // go straight until nothing leftside
+        SetRobotSpeed(10, 10);
+        while ((infSensor & 0x2) ) {
+          vTaskDelay(50);
+          while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+            vTaskDelay(20);
+          }
+        }
+      }
+      if (shapeFind) {
+        type_coordinate target;
+        target.x = (shape[ (shapeindex-1+10) % 10].x + now.x ) / 2;
+        target.y = (shape[ (shapeindex-1+10) % 10].y + now.y ) / 2;
+        GotoWaypoint(target.x, target.y);
+        halBeepOn(2100);
+        vTaskDelay(10000);
+        halBeepOff();
+        break;
+      }
+    }
+  }
+}
+// for robot 1
+void UPusherShanTask( void *pvParameters ){
   SetRobotSpeed(0, 0);
   vTaskDelay(1000);
   bool obstacleFind = false;
   bool grooveFind = false;
-  uint8_t infSensor, bat1248, infSensor_bp, cnt;
+  uint8_t infSensor, bat1248, cnt;
   int16_t sL,sR;
   type_coordinate tp;
   for(;;) {
@@ -137,26 +296,29 @@ void DEMOTask( void *pvParameters ){
       }
     }
     // obstacle is found
-    for(;;) {
+    for(;;) { // break if sensing error or groove found
       // rotate until nothing ahead and something leftside
       cnt = 0;
-      while ( (infSensor & 0x80) || !(infSensor & 0x2) || !(infSensor & 0x4) ) {
-        RobotRotate(20, 10);
+      SetRobotSpeed(5, -5);
+      while ( (infSensor & 0x80) || !(infSensor & 0x2) ) {
+        vTaskDelay(50);
         cnt ++;
         while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
           vTaskDelay(20);
         }
-        if (cnt > 36) {
+        if (cnt > (uint8_t)2000) { // 2000 should be considered carefully, approximate 360 degree
           SetRobotSpeed(0, 0);
           obstacleFind = false;
           break;
         }
       }
+      SetRobotSpeed(0, 0);
       if (obstacleFind == false) { // sensor error, find obstacle again
         break;
       }
-      RobotRotate(20, -13);
-      
+      // adjust orientation
+      RobotRotate(20, -20);
+
       // go straight until nothing leftside
       SetRobotSpeed(10, 10);
       while ( (infSensor & 0x2) || (infSensor & 0x4)) {
@@ -167,14 +329,14 @@ void DEMOTask( void *pvParameters ){
       }
       SetRobotSpeed(0, 0);
       
-      for (;;) {
+      for (;;) { // break if groove found
         // Go straight a little bit
         SetRobotSpeed(10, 10);
         vTaskDelay(1500);
         SetRobotSpeed(0, 0);
       
         // turn left 90 degree
-        RobotRotate(20, -90);
+        RobotRotate(20, 90);
         SetRobotSpeed(0, 0);
         
         // go directly until something leftside
@@ -188,44 +350,27 @@ void DEMOTask( void *pvParameters ){
         halBeepOn(2100);
         vTaskDelay(50);
         halBeepOff();
-//        SetRobotSpeed(0, 0);
         
         // go straight for 0.5s
-//        SetRobotSpeed(10, 10);
         vTaskDelay(500);
         
         // go straight until nothing leftside
         SetRobotSpeed(10, 10);
         grooveFind = false;
         for(;;) {
-          //vTaskDelay(50);
-          halBeepOn(2100);
           vTaskDelay(50);
-          //halBeepOff();
           while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
             vTaskDelay(20);
           }
           if ( ( infSensor & 0xc1 ) == 0xc1 ) {
-            halBeepOff();
             SetRobotSpeed(0, 0);
             grooveFind = true;
             break;
           }
           if (!(infSensor & 0x2) ) {
-            halBeepOff();
             SetRobotSpeed(0, 0);
             break;
           }
-          //cnt = 0;
-          //infSensor_bp = infSensor;
-          //while (infSensor_bp) {
-            //if (infSensor_bp & 1) cnt ++;
-            //infSensor_bp >>= 1;
-          //}
-          //if (cnt > 5) {
-          //  grooveFind = true;
-          //  break;
-          //}
         }
         if (grooveFind) {
           break;
@@ -249,19 +394,57 @@ void DEMOTask( void *pvParameters ){
       vTaskDelay(50);
       halBeepOff();
       // counter-clockwise rotate
-      RobotRotate(20, -40);
+      //RobotRotate(20, -40);
       // Move backward for 14cm
-      SetRobotSpeed(-20, -20);
-      vTaskDelay(10000);
-      // beep forever
-      halBeepOn(2100);
-      vTaskDelay(50);
-      halBeepOff();
+      //SetRobotSpeed(-20, -20);
+      //vTaskDelay(10000);
+      // beep 
+      //halBeepOn(2100);
+      //vTaskDelay(50);
+      //halBeepOff();
       SetRobotSpeed(0, 0);
       for(;;)
         vTaskDelay(1000);
     }
   }
+}
+
+void vMagCalTask(void *pvParameters) {
+  extern xQueueHandle xQueueHandleRFTx;
+  int16_t magX, magY;
+  int16_t magXmin = 0x7fff, magXmax = 0xffff, magYmin = 0x7fff, magYmax = 0xffff;
+  uint16_t i = 0;
+  for (;i<144;++i){
+    RobotRotate(5,5);
+    while(halMPU9250RdCompassX(&magX) == 0){ //cmopass data update every 10ms
+      vTaskDelay(5);
+    }
+    while(halMPU9250RdCompassY(&magY) == 0){ 
+      vTaskDelay(5);
+    }
+    magXmin = mymin(magX, magXmin);
+    magXmax = mymax(magX, magXmax);
+    magYmin = mymin(magY, magYmin);
+    magYmax = mymax(magY, magYmax);
+  }
+    uint8_t tx[32];
+    
+    type_RFPacket* p = (type_RFPacket*)tx;
+    p->id = 1;
+    p->locationX = magXmin;
+    p->locationY = magXmax;
+    p->speedL = magYmin;
+    p->speedR = magYmax;
+    p->crc16Res = CRC16(tx, sizeof(type_RFPacket)-2);
+  
+    while (xQueueSendToBack(xQueueHandleRFTx, tx, portMAX_DELAY)!=pdPASS)  {
+      vTaskDelay(5);
+    }
+    halSetLedStatus(LED_RED, LED_TOGGLE);
+    vTaskDelay(100);
+  halBeepOn(2100);
+  vTaskDelay(50);
+  halBeepOff();
 }
 
 typedef struct type_coPacket{

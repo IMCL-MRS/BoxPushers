@@ -22,24 +22,16 @@ void BCASTTask( void *pvParameters ){
       vTaskDelay(20);
     }
     type_coordinate tp = RobotGetPosition();
-    //p->speedL = GetRobotSpeedLeft();
-    //p->speedR = GetRobotSpeedRight();
-    
-    //if (infSensor ==  0) {
-    //  halBeepOn(2100);
-    //}
-    //else {
-    //  halBeepOff();
-    //}
-    p->speedL = sL;
-    p->speedR = sR;
+    p->speedL = -sL;
+    p->speedR = -sR;
     p->infSensor = infSensor;
-    p->dir    = CalibrateNorth2X();
+    // p->dir    = CalibrateNorth2X();
     p->locationX = tp.x;
     p->locationY = tp.y;
+    //p->status = getStatus();
     p->crc16Res = CRC16(tx, sizeof(type_RFPacket)-2);
     
-    while (xQueueSendToBack(xQueueHandleRFTx, tx, portMAX_DELAY)!=pdPASS)  {
+    while (xQueueSendToBack(xQueueHandleRFTx, tx, portMAX_DELAY)!=pdPASS) {
       vTaskDelay(5);
     }
     

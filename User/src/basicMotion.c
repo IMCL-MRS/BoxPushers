@@ -195,6 +195,15 @@ const float cosTable[] = {
 ////////////////////////////////////////////////////////////////////////////////
 //∑µªÿmmŒª÷√
 ////////////////////////////////////////////////////////////////////////////////
+
+//int16_t status = 0;
+int16_t getStatus() {
+  //return status;
+}
+int16_t setStatus(int16_t _status) {
+  //stats &= _status;
+}
+
 type_coordinate  robotCoordinate;
 type_coordinate RobotGetPosition(void){
   int32_t d1, d2;
@@ -247,8 +256,9 @@ int16_t ReadAngle2North() {
   while(halMPU9250RdCompassY(&compY)==0) {
     vTaskDelay(5);
   }
-  compX = (float)(compX-COMPASS_X_CALI_PARA);
-  compY = (float)(compY-COMPASS_Y_CALI_PARA)*MAG_RATIO;
+  compX = (compX - COMPASS_X_CALI_PARA);
+  compY = (compY - COMPASS_Y_CALI_PARA)*(MAG_RATIO);
+
   
   edgeLong= sqrt(compX*compX + compY*compY);     
   angleReturn = ((180/__PI)*acos(compY/edgeLong));

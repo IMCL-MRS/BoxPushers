@@ -21,6 +21,7 @@ typedef struct type_RFPacket{
   int16_t  locationX;
   int16_t  locationY;
   uint8_t  infSensor;
+  //int16_t  status;
   uint16_t crc16Res;
 }type_RFPacket;
 #pragma pack(pop)
