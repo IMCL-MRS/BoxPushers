@@ -15,6 +15,11 @@ extern void COMPASSCALITask(void *pvParameters);
 extern void COORDINATECALITask(void *pvParameters);
 extern void IPusherShanTask(void *pvParameters);
 extern void vMagCalTask(void *pvParameters);
+extern void TestTask(void *pvParameters);
+extern void BOTTOMTask(void *pvParameters);
+extern void ROBOT2TASK(void *pvParameters); // H bottom (no black)
+extern void ROBOT3TASK(void *pvParameters); // H top (with black)
+extern void ROBOT4TASK(void *pvParameters); // I
 
 extern void gotoPointTest(void *pvParameters);
 #endif

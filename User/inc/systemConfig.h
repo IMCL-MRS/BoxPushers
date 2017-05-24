@@ -2,7 +2,7 @@
 #define __SYSTEMCONFIG_H
 
 
-#define ROBOT_ID      (3)
+#define ROBOT_ID      (2)
 
 
 #endif

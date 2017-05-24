@@ -196,9 +196,9 @@ const float cosTable[] = {
 //∑µªÿmmŒª÷√
 ////////////////////////////////////////////////////////////////////////////////
 
-//int16_t status = 0;
+int16_t status = 0;
 int16_t getStatus() {
-  //return status;
+  return status;
 }
 int16_t setStatus(int16_t _status) {
   //stats &= _status;
@@ -214,9 +214,9 @@ type_coordinate RobotGetPosition(void){
   
   tc.y = (d1*d1 - d2*d2 + DISTANCE_B1_2_B2*DISTANCE_B1_2_B2)/(2*DISTANCE_B1_2_B2);
   if ((d1*d1 - DISTANCE_B1_2_B2*DISTANCE_B1_2_B2 - tc.y*tc.y) < 0){
-    halBeepOn(2093);
-    vTaskDelay(20);
-    halBeepOff();
+    //halBeepOn(2093);
+    //vTaskDelay(20);
+    //halBeepOff();
     return robotCoordinate;
   }
   else {
