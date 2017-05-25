@@ -257,7 +257,7 @@ void ROBOT3TASK( void *pvParameters ){
       }
       tp = RobotGetPosition();
       //if ( (tp.x > 130) && (tp.y > 15) && (tp.x < 210) && (tp.y < 125) ){
-      if ( (tp.x > 130) && (tp.y > 70) && (tp.x < 170) && (tp.y < 125) ){
+      if ( (tp.x > 100) && (tp.y > 70) && (tp.x < 190) && (tp.y < 140) ){
         SetRobotSpeed(50, 50);
         vTaskDelay(200);
       } else {
@@ -268,13 +268,13 @@ void ROBOT3TASK( void *pvParameters ){
     }
     // obstacle is found
     SetRobotSpeed(10, 10);
-    vTaskDelay(2500);
+    vTaskDelay(2300);
     SetRobotSpeed(0, 0);
     for(;;) { // break if sensing error or groove found
       // rotate until nothing ahead and something leftside
       cnt = 0;
-      SetRobotSpeed(5, -5);
-      while ( (infSensor & 0x80) || !(infSensor & 0x2) ) {
+      SetRobotSpeed(-5, 5);
+      while ( (infSensor & 0x80) || !(infSensor & 0x20) ) {
         vTaskDelay(50);
         cnt ++;
         while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
@@ -291,11 +291,11 @@ void ROBOT3TASK( void *pvParameters ){
         break;
       }
       // adjust orientation
-      RobotRotate(20, -35);
+      RobotRotate(20, 30);
 
       // go straight until nothing leftside
       SetRobotSpeed(10, 10);
-      while ( (infSensor & 0x2) ) { // || (infSensor & 0x4)
+      while ( (infSensor & 0x20) ) { // || (infSensor & 0x4)
         vTaskDelay(50);
         while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
           vTaskDelay(20);
@@ -310,12 +310,12 @@ void ROBOT3TASK( void *pvParameters ){
         SetRobotSpeed(0, 0);
       
         // turn left 90 degree
-        RobotRotate(20, 90);
+        RobotRotate(20, -90);
         SetRobotSpeed(0, 0);
         
         // go directly until something leftside
         SetRobotSpeed(10, 10);
-        while (!(infSensor & 0x2) ) {
+        while (!(infSensor & 0x20) ) {
           vTaskDelay(50);
           while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
             vTaskDelay(20);
@@ -341,7 +341,7 @@ void ROBOT3TASK( void *pvParameters ){
             grooveFind = true;
             break;
           }
-          if (!(infSensor & 0x2) ) {
+          if (!(infSensor & 0x20) ) {
             SetRobotSpeed(0, 0);
             break;
           }
@@ -359,7 +359,8 @@ void ROBOT3TASK( void *pvParameters ){
       vTaskDelay(1000);
       for (;;) {
         tp = RobotGetPosition();
-        if((tp.x <= 140) || (tp.y <= 80) || (tp.x >= 160) || (tp.y >= 115)) {
+        //if ( (tp.x > 100) && (tp.y > 70) && (tp.x < 190) && (tp.y < 140) ){
+        if((tp.x <= 100) || (tp.y <= 75) || (tp.x >= 190) || (tp.y >= 140)) {
           break;
         }
         vTaskDelay(100);
