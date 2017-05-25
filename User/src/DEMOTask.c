@@ -107,7 +107,7 @@ void ROBOT2TASK( void *pvParameters ){
       }
       tp = RobotGetPosition();
       // if ( (tp.x > 130) && (tp.y > 15) && (tp.x < 210) && (tp.y < 125) ){
-      if ( (tp.x > 130) && (tp.y > 15) && (tp.x < 170) && (tp.y < 70) ){
+      if ( (tp.x > 100) && (tp.y > 0) && (tp.x < 190) && (tp.y < 70) ){
         SetRobotSpeed(50, 50);
         vTaskDelay(200);
       } else {
@@ -118,7 +118,7 @@ void ROBOT2TASK( void *pvParameters ){
     }
     // obstacle is found
     SetRobotSpeed(10, 10);
-    vTaskDelay(1000);
+    vTaskDelay(700);
     SetRobotSpeed(0, 0);
     for(;;) { // break if sensing error or groove found
       // rotate until nothing ahead and something leftside
@@ -141,7 +141,7 @@ void ROBOT2TASK( void *pvParameters ){
         break;
       }
       // adjust orientation
-      RobotRotate(20, -20);
+      RobotRotate(20, -28);
 
       // go straight until nothing leftside
       SetRobotSpeed(10, 10);
@@ -153,10 +153,15 @@ void ROBOT2TASK( void *pvParameters ){
       }
       SetRobotSpeed(0, 0);
       
+      // go straight a little bit
+      SetRobotSpeed(10, 10);
+      vTaskDelay(500);
+      SetRobotSpeed(0, 0);
+      
       for (;;) { // break if groove found
         // Go straight a little bit (at least half robot diameter)
         SetRobotSpeed(10, 10);
-        vTaskDelay(2500);
+        vTaskDelay(2300);
         SetRobotSpeed(0, 0);
       
         // turn left 90 degree
@@ -203,12 +208,11 @@ void ROBOT2TASK( void *pvParameters ){
       halBeepOn(2100);
       vTaskDelay(20);
       halBeepOff();
-      // SetRobotSpeed(0, 0);
-      // Push the box outside
+      
       SetRobotSpeed(10, 10);
       for (;;) {
         tp = RobotGetPosition();
-        if((tp.x <= 140) || (tp.y <= 25) || (tp.x >= 160) || (tp.y >= 65)) {
+        if((tp.x <= 100) || (tp.y <= 0) || (tp.x >= 190) || (tp.y >= 65)) {
           break;
         }
         vTaskDelay(100);
@@ -217,16 +221,33 @@ void ROBOT2TASK( void *pvParameters ){
       halBeepOn(2100);
       vTaskDelay(50);
       halBeepOff();
-      // counter-clockwise rotate
-      //RobotRotate(20, -40);
-      // Move backward for 14cm
-      //SetRobotSpeed(-20, -20);
-      //vTaskDelay(10000);
-      // beep 
-      //halBeepOn(2100);
-      //vTaskDelay(50);
-      //halBeepOff();
-      // SetRobotSpeed(0, 0);
+      vTaskDelay(900);
+      if (tp.x > 160) {
+        RobotRotate(20, 90);
+        SetRobotSpeed(10, 10);
+        for (;;) {
+          tp = RobotGetPosition();
+          if(tp.x <= 160) {
+            break;
+          }
+          vTaskDelay(50);
+        }
+      } else {
+        RobotRotate(20, -90);
+        SetRobotSpeed(10, 10);
+        for (;;) {
+          tp = RobotGetPosition();
+          if(tp.x >= 160) {
+            break;
+          }
+          vTaskDelay(50);
+        }
+      }
+      SetRobotSpeed(0, 0);
+      halBeepOn(2100);
+      vTaskDelay(50);
+      halBeepOff();
+
       for(;;)
         vTaskDelay(1000);
     }
@@ -369,16 +390,32 @@ void ROBOT3TASK( void *pvParameters ){
       halBeepOn(2100);
       vTaskDelay(50);
       halBeepOff();
-      // counter-clockwise rotate
-      //RobotRotate(20, -40);
-      // Move backward for 14cm
-      //SetRobotSpeed(-20, -20);
-      //vTaskDelay(10000);
-      // beep 
-      //halBeepOn(2100);
-      //vTaskDelay(50);
-      //halBeepOff();
-      //SetRobotSpeed(0, 0);
+      vTaskDelay(900);
+      if (tp.x > 160) {
+        RobotRotate(20, -90);
+        SetRobotSpeed(10, 10);
+        for (;;) {
+          tp = RobotGetPosition();
+          if(tp.x <= 160) {
+            break;
+          }
+          vTaskDelay(50);
+        }
+      } else {
+        RobotRotate(20, 90);
+        SetRobotSpeed(10, 10);
+        for (;;) {
+          tp = RobotGetPosition();
+          if(tp.x >= 160) {
+            break;
+          }
+          vTaskDelay(50);
+        }
+      }
+      SetRobotSpeed(0, 0);
+      halBeepOn(2100);
+      vTaskDelay(50);
+      halBeepOff();
       for(;;)
         vTaskDelay(1000);
     }

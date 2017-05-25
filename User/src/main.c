@@ -68,8 +68,8 @@ int main(void) {
   //xTaskCreate( IPusherShanTask,    ( signed portCHAR * ) "LED",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
   //xTaskCreate( vMagCalTask,    ( signed portCHAR * ) "LED",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
   //xTaskCreate( UPusherShanTask,    ( signed portCHAR * ) "LED",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
-  //xTaskCreate( ROBOT2TASK,    ( signed portCHAR * ) "ROBOT2TASK",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
-  xTaskCreate( ROBOT3TASK,    ( signed portCHAR * ) "ROBOT3TASK",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
+  xTaskCreate( ROBOT2TASK,    ( signed portCHAR * ) "ROBOT2TASK",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
+  //xTaskCreate( ROBOT3TASK,    ( signed portCHAR * ) "ROBOT3TASK",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
   //xTaskCreate( ROBOT4TASK,    ( signed portCHAR * ) "ROBOT4TASK",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
   //xTaskCreate( TestTask,    ( signed portCHAR * ) "LED",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
   //xTaskCreate( gotoPointTest,    ( signed portCHAR * ) "LED",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
