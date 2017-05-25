@@ -289,7 +289,7 @@ void ROBOT3TASK( void *pvParameters ){
     }
     // obstacle is found
     SetRobotSpeed(10, 10);
-    vTaskDelay(2300);
+    vTaskDelay(2000);
     SetRobotSpeed(0, 0);
     for(;;) { // break if sensing error or groove found
       // rotate until nothing ahead and something leftside
@@ -312,7 +312,7 @@ void ROBOT3TASK( void *pvParameters ){
         break;
       }
       // adjust orientation
-      RobotRotate(20, 30);
+      RobotRotate(20, 37);
 
       // go straight until nothing leftside
       SetRobotSpeed(10, 10);
@@ -456,7 +456,7 @@ void ROBOT4TASK( void *pvParameters ){
     }
     // obstacle is found
     SetRobotSpeed(10, 10);
-    vTaskDelay(500);
+    vTaskDelay(1500);
     SetRobotSpeed(0, 0);
     for(;;) { // break if sensing error or groove found
       // rotate until nothing ahead and something leftside
@@ -479,7 +479,7 @@ void ROBOT4TASK( void *pvParameters ){
         break;
       }
       // adjust orientation
-      RobotRotate(20, -50);
+      RobotRotate(20, -45);
 
       // go straight until nothing leftside
       SetRobotSpeed(10, 10);
@@ -498,7 +498,7 @@ void ROBOT4TASK( void *pvParameters ){
       
       // go backwards for a while
       SetRobotSpeed(-20, -20);
-      vTaskDelay(1000);
+      vTaskDelay(800);
       SetRobotSpeed(0, 0);
       
       // beep 
@@ -756,8 +756,8 @@ void IPusherShanTask(void *pvParameters) {
     }
   }
 }
-// for robot 1
-void UPusherShanTask( void *pvParameters ){
+// for robot 3
+void UPusher3Task( void *pvParameters ){
   SetRobotSpeed(0, 0);
   vTaskDelay(1000);
   bool obstacleFind = false;
@@ -779,7 +779,7 @@ void UPusherShanTask( void *pvParameters ){
         break;
       }
       tp = RobotGetPosition();
-      if ( (tp.x > 130) && (tp.y > 15) && (tp.x < 210) && (tp.y < 125) ){
+      if ( (tp.x > 130) && (tp.y > 15) && (tp.x < 200) && (tp.y < 125) ){
         SetRobotSpeed(50, 50);
         vTaskDelay(200);
       } else {
@@ -789,6 +789,9 @@ void UPusherShanTask( void *pvParameters ){
       }
     }
     // obstacle is found
+    SetRobotSpeed(10, 10);
+    vTaskDelay(300);
+    SetRobotSpeed(0, 0);
     for(;;) { // break if sensing error or groove found
       // rotate until nothing ahead and something leftside
       cnt = 0;
@@ -810,11 +813,11 @@ void UPusherShanTask( void *pvParameters ){
         break;
       }
       // adjust orientation
-      RobotRotate(20, -20);
+      RobotRotate(20, -25);
 
       // go straight until nothing leftside
       SetRobotSpeed(10, 10);
-      while ( (infSensor & 0x2) || (infSensor & 0x4)) {
+      while ( (infSensor & 0x2) ) { // || (infSensor & 0x4)) {
         vTaskDelay(50);
         while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
           vTaskDelay(20);
@@ -825,7 +828,7 @@ void UPusherShanTask( void *pvParameters ){
       for (;;) { // break if groove found
         // Go straight a little bit
         SetRobotSpeed(10, 10);
-        vTaskDelay(1500);
+        vTaskDelay(2000);
         SetRobotSpeed(0, 0);
       
         // turn left 90 degree
@@ -877,7 +880,450 @@ void UPusherShanTask( void *pvParameters ){
       SetRobotSpeed(30, 30);
       for (;;) {
         tp = RobotGetPosition();
-        if((tp.x <= 123) || (tp.y <= 8) || (tp.x >= 217) || (tp.y >= 132)) {
+        if((tp.x <= 123) || (tp.y <= 8) || (tp.x >= 207) || (tp.y >= 132)) {
+          break;
+        }
+        vTaskDelay(100);
+      }
+      SetRobotSpeed(0, 0);
+      halBeepOn(2100);
+      vTaskDelay(50);
+      halBeepOff();
+      // counter-clockwise rotate
+      //RobotRotate(20, -40);
+      // Move backward for 14cm
+      //SetRobotSpeed(-20, -20);
+      //vTaskDelay(10000);
+      // beep 
+      //halBeepOn(2100);
+      //vTaskDelay(50);
+      //halBeepOff();
+      SetRobotSpeed(0, 0);
+      for(;;)
+        vTaskDelay(1000);
+    }
+  }
+}
+// for robot 2
+void UPusher2Task( void *pvParameters ){
+  SetRobotSpeed(0, 0);
+  vTaskDelay(1000);
+  bool obstacleFind = false;
+  bool grooveFind = false;
+  uint8_t infSensor, bat1248, cnt;
+  int16_t sL,sR;
+  type_coordinate tp;
+  for(;;) {
+    for(;;) { // break if obstacle found
+      while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248)==0){
+        vTaskDelay(20);
+      }
+      if (infSensor) { // obstacle found, beep
+        SetRobotSpeed(0, 0);
+        halBeepOn(3951);
+        vTaskDelay(20);
+        halBeepOff();
+        obstacleFind = true;
+        break;
+      }
+      tp = RobotGetPosition();
+      if ( (tp.x > 130) && (tp.y > 15) && (tp.x < 200) && (tp.y < 125) ){
+        SetRobotSpeed(50, 50);
+        vTaskDelay(200);
+      } else {
+        RobotRotate(20, 120);
+        SetRobotSpeed(50, 50);
+        vTaskDelay(1000);
+      }
+    }
+    // obstacle is found
+    SetRobotSpeed(10, 10);
+    vTaskDelay(800);
+    SetRobotSpeed(0, 0);
+    for(;;) { // break if sensing error or groove found
+      // rotate until nothing ahead and something leftside
+      cnt = 0;
+      SetRobotSpeed(5, -5);
+      while ( (infSensor & 0x80) || !(infSensor & 0x2) ) {
+        vTaskDelay(50);
+        cnt ++;
+        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+          vTaskDelay(20);
+        }
+        if (cnt > (uint8_t)2000) { // 2000 should be considered carefully, approximate 360 degree
+          SetRobotSpeed(0, 0);
+          obstacleFind = false;
+          break;
+        }
+      }
+      SetRobotSpeed(0, 0);
+      if (obstacleFind == false) { // sensor error, find obstacle again
+        break;
+      }
+      // adjust orientation
+      RobotRotate(20, -22);
+
+      // go straight until nothing leftside
+      SetRobotSpeed(10, 10);
+      while ( (infSensor & 0x2) ) { // || (infSensor & 0x4)) {
+        vTaskDelay(50);
+        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+          vTaskDelay(20);
+        }
+      }
+      SetRobotSpeed(0, 0);
+      
+      for (;;) { // break if groove found
+        // Go straight a little bit
+        SetRobotSpeed(10, 10);
+        vTaskDelay(2300);
+        SetRobotSpeed(0, 0);
+      
+        // turn left 90 degree
+        RobotRotate(20, 90);
+        SetRobotSpeed(0, 0);
+        
+        // go directly until something leftside
+        SetRobotSpeed(10, 10);
+        while (!(infSensor & 0x2) ) {
+          vTaskDelay(50);
+          while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+            vTaskDelay(20);
+          }
+        }
+        halBeepOn(2100);
+        vTaskDelay(50);
+        halBeepOff();
+        
+        // go straight for 0.5s
+        vTaskDelay(500);
+        
+        // go straight until nothing leftside
+        SetRobotSpeed(10, 10);
+        grooveFind = false;
+        for(;;) {
+          vTaskDelay(50);
+          while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+            vTaskDelay(20);
+          }
+          if ( ( infSensor & 0xc1 ) == 0xc1 ) {
+            SetRobotSpeed(0, 0);
+            grooveFind = true;
+            break;
+          }
+          if (!(infSensor & 0x2) ) {
+            SetRobotSpeed(0, 0);
+            break;
+          }
+        }
+        if (grooveFind) {
+          break;
+        }
+      }
+      halBeepOn(2100);
+      vTaskDelay(20);
+      halBeepOff();
+      SetRobotSpeed(0, 0);
+      // Push the box outside
+      SetRobotSpeed(30, 30);
+      for (;;) {
+        tp = RobotGetPosition();
+        if((tp.x <= 123) || (tp.y <= 8) || (tp.x >= 207) || (tp.y >= 132)) {
+          break;
+        }
+        vTaskDelay(100);
+      }
+      SetRobotSpeed(0, 0);
+      halBeepOn(2100);
+      vTaskDelay(50);
+      halBeepOff();
+      // counter-clockwise rotate
+      //RobotRotate(20, -40);
+      // Move backward for 14cm
+      //SetRobotSpeed(-20, -20);
+      //vTaskDelay(10000);
+      // beep 
+      //halBeepOn(2100);
+      //vTaskDelay(50);
+      //halBeepOff();
+      SetRobotSpeed(0, 0);
+      for(;;)
+        vTaskDelay(1000);
+    }
+  }
+}
+void UPusherTask( void *pvParameters ){
+  SetRobotSpeed(0, 0);
+  vTaskDelay(1000);
+  bool obstacleFind = false;
+  bool grooveFind = false;
+  uint8_t infSensor, bat1248, cnt;
+  int16_t sL,sR;
+  type_coordinate tp;
+  for(;;) {
+    for(;;) { // break if obstacle found
+      while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248)==0){
+        vTaskDelay(20);
+      }
+      if (infSensor) { // obstacle found, beep
+        SetRobotSpeed(0, 0);
+        halBeepOn(3951);
+        vTaskDelay(20);
+        halBeepOff();
+        obstacleFind = true;
+        break;
+      }
+      tp = RobotGetPosition();
+      if ( (tp.x > 130) && (tp.y > 15) && (tp.x < 200) && (tp.y < 125) ){
+        SetRobotSpeed(50, 50);
+        vTaskDelay(200);
+      } else {
+        RobotRotate(20, 120);
+        SetRobotSpeed(50, 50);
+        vTaskDelay(1000);
+      }
+    }
+    // obstacle is found
+    SetRobotSpeed(10, 10);
+    vTaskDelay(300);
+    SetRobotSpeed(0, 0);
+    for(;;) { // break if sensing error or groove found
+      // rotate until nothing ahead and something leftside
+      cnt = 0;
+      SetRobotSpeed(5, -5);
+      while ( (infSensor & 0x80) || !(infSensor & 0x2) ) {
+        vTaskDelay(50);
+        cnt ++;
+        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+          vTaskDelay(20);
+        }
+        if (cnt > (uint8_t)2000) { // 2000 should be considered carefully, approximate 360 degree
+          SetRobotSpeed(0, 0);
+          obstacleFind = false;
+          break;
+        }
+      }
+      SetRobotSpeed(0, 0);
+      if (obstacleFind == false) { // sensor error, find obstacle again
+        break;
+      }
+      // adjust orientation
+      RobotRotate(20, -25);
+
+      // go straight until nothing leftside
+      SetRobotSpeed(10, 10);
+      while ( (infSensor & 0x2) ) { // || (infSensor & 0x4)) {
+        vTaskDelay(50);
+        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+          vTaskDelay(20);
+        }
+      }
+      SetRobotSpeed(0, 0);
+      
+      for (;;) { // break if groove found
+        // Go straight a little bit
+        SetRobotSpeed(10, 10);
+        vTaskDelay(2000);
+        SetRobotSpeed(0, 0);
+      
+        // turn left 90 degree
+        RobotRotate(20, 90);
+        SetRobotSpeed(0, 0);
+        
+        // go directly until something leftside
+        SetRobotSpeed(10, 10);
+        while (!(infSensor & 0x2) ) {
+          vTaskDelay(50);
+          while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+            vTaskDelay(20);
+          }
+        }
+        halBeepOn(2100);
+        vTaskDelay(50);
+        halBeepOff();
+        
+        // go straight for 0.5s
+        vTaskDelay(500);
+        
+        // go straight until nothing leftside
+        SetRobotSpeed(10, 10);
+        grooveFind = false;
+        for(;;) {
+          vTaskDelay(50);
+          while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+            vTaskDelay(20);
+          }
+          if ( ( infSensor & 0xc1 ) == 0xc1 ) {
+            SetRobotSpeed(0, 0);
+            grooveFind = true;
+            break;
+          }
+          if (!(infSensor & 0x2) ) {
+            SetRobotSpeed(0, 0);
+            break;
+          }
+        }
+        if (grooveFind) {
+          break;
+        }
+      }
+      halBeepOn(2100);
+      vTaskDelay(20);
+      halBeepOff();
+      SetRobotSpeed(0, 0);
+      // Push the box outside
+      SetRobotSpeed(30, 30);
+      for (;;) {
+        tp = RobotGetPosition();
+        if((tp.x <= 123) || (tp.y <= 8) || (tp.x >= 207) || (tp.y >= 132)) {
+          break;
+        }
+        vTaskDelay(100);
+      }
+      SetRobotSpeed(0, 0);
+      halBeepOn(2100);
+      vTaskDelay(50);
+      halBeepOff();
+      // counter-clockwise rotate
+      //RobotRotate(20, -40);
+      // Move backward for 14cm
+      //SetRobotSpeed(-20, -20);
+      //vTaskDelay(10000);
+      // beep 
+      //halBeepOn(2100);
+      //vTaskDelay(50);
+      //halBeepOff();
+      SetRobotSpeed(0, 0);
+      for(;;)
+        vTaskDelay(1000);
+    }
+  }
+}
+// for all robots
+void UPusherAllTask( void *pvParameters ){
+  SetRobotSpeed(0, 0);
+  vTaskDelay(1000);
+  bool obstacleFind = false;
+  bool grooveFind = false;
+  uint8_t infSensor, bat1248, cnt;
+  int16_t sL,sR;
+  type_coordinate tp;
+  for(;;) {
+    for(;;) { // break if obstacle found
+      while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248)==0){
+        vTaskDelay(20);
+      }
+      if (infSensor & 0x80) { // obstacle found, beep
+        SetRobotSpeed(0, 0);
+        halBeepOn(3951);
+        vTaskDelay(20);
+        halBeepOff();
+        obstacleFind = true;
+        break;
+      }
+      tp = RobotGetPosition();
+      if ( (tp.x > 130) && (tp.y > 15) && (tp.x < 200) && (tp.y < 125) ){
+        SetRobotSpeed(50, 50);
+        vTaskDelay(200);
+      } else {
+        RobotRotate(20, 120);
+        SetRobotSpeed(50, 50);
+        vTaskDelay(1000);
+      }
+    }
+    // obstacle is found
+    SetRobotSpeed(10, 10);
+    vTaskDelay(1500);
+    SetRobotSpeed(0, 0);
+    for(;;) { // break if sensing error or groove found
+      // rotate until nothing ahead and something leftside
+      cnt = 0;
+      SetRobotSpeed(5, -5);
+      while ( (infSensor & 0x80) || !(infSensor & 0x2) ) {
+        vTaskDelay(50);
+        cnt ++;
+        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+          vTaskDelay(20);
+        }
+        if (cnt > (uint8_t)2000) { // 2000 should be considered carefully, approximate 360 degree
+          SetRobotSpeed(0, 0);
+          obstacleFind = false;
+          break;
+        }
+      }
+      SetRobotSpeed(0, 0);
+      if (obstacleFind == false) { // sensor error, find obstacle again
+        break;
+      }
+      // adjust orientation
+      RobotRotate(20, -18);
+      
+      // go straight until nothing leftside
+      SetRobotSpeed(10, 10);
+      while ( (infSensor & 0x2) ) { // || (infSensor & 0x4)) {
+        vTaskDelay(50);
+        while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+          vTaskDelay(20);
+        }
+      }
+      SetRobotSpeed(0, 0);
+      
+      for (;;) { // break if groove found
+        // Go straight a little bit
+        SetRobotSpeed(10, 10);
+        vTaskDelay(2300);
+        SetRobotSpeed(0, 0);
+      
+        // turn left 90 degree
+        RobotRotate(20, 92);
+        SetRobotSpeed(0, 0);
+        
+        // go directly until something leftside
+        SetRobotSpeed(10, 10);
+        while (!(infSensor & 0x2) ) {
+          vTaskDelay(50);
+          while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+            vTaskDelay(20);
+          }
+        }
+        halBeepOn(2100);
+        vTaskDelay(50);
+        halBeepOff();
+        
+        // go straight for 0.5s
+        vTaskDelay(500);
+        
+        // go straight until nothing leftside
+        SetRobotSpeed(10, 10);
+        grooveFind = false;
+        for(;;) {
+          vTaskDelay(50);
+          while (GetRobotBStatus(&infSensor, &sL, &sR, &bat1248) == 0) {
+            vTaskDelay(20);
+          }
+          if ( ( infSensor & 0xc1 ) == 0xc1 ) {
+            SetRobotSpeed(0, 0);
+            grooveFind = true;
+            break;
+          }
+          if (!(infSensor & 0x2) ) {
+            SetRobotSpeed(0, 0);
+            break;
+          }
+        }
+        if (grooveFind) {
+          break;
+        }
+      }
+      halBeepOn(2100);
+      vTaskDelay(20);
+      halBeepOff();
+      SetRobotSpeed(0, 0);
+      // Push the box outside
+      SetRobotSpeed(30, 30);
+      for (;;) {
+        tp = RobotGetPosition();
+        if( (tp.y <= 8) || (tp.y >= 132) ) {
           break;
         }
         vTaskDelay(100);

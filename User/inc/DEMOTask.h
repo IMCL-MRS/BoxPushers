@@ -8,7 +8,8 @@
 #include "halLed.h"
 #include "vMagTask.h"
 
-extern void UPusherShanTask( void *pvParameters );
+extern void UPusher3Task( void *pvParameters );
+extern void UPusher2Task( void *pvParameters );
 extern void vPushLineTask( void *pvParameters);
 extern void BEEP_DEMOTask( void *pvParameters );
 extern void COMPASSCALITask(void *pvParameters);
@@ -20,6 +21,7 @@ extern void BOTTOMTask(void *pvParameters);
 extern void ROBOT2TASK(void *pvParameters); // H bottom (no black)
 extern void ROBOT3TASK(void *pvParameters); // H top (with black)
 extern void ROBOT4TASK(void *pvParameters); // I
+extern void UPusherAllTask(void *pvParameters);
 
 extern void gotoPointTest(void *pvParameters);
 #endif
