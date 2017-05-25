@@ -23,8 +23,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 //机器人头方向与北方夹角-180 到 180度, 顺时针为正
 ////////////////////////////////////////////////////////////////////////////////
-#define ROBOT_3
-
+#define ROBOT_1
+// MAG_RATIO is delta X / delta Y
 #ifdef ROBOT_1
 #define COMPASS_X_CALI_PARA        (25.0f)
 #define COMPASS_Y_CALI_PARA        (-161.0f)
@@ -37,9 +37,9 @@
 #endif // ROBOT_3
 
 #ifdef ROBOT_4
-#define COMPASS_X_CALI_PARA        (64.5f)
-#define COMPASS_Y_CALI_PARA        (0)
-#define MAG_RATIO                  (363/418.0f)
+#define COMPASS_X_CALI_PARA        (63.0f)
+#define COMPASS_Y_CALI_PARA        (52.0f)
+#define MAG_RATIO                  (462/416.0f)
 #endif // ROBOT_4
 
 //#define COMPASS_X_CALI_PARA        (129.0f)

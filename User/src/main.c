@@ -72,6 +72,7 @@ int main(void) {
   //xTaskCreate( ROBOT3TASK,    ( signed portCHAR * ) "ROBOT3TASK",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
   //xTaskCreate( ROBOT4TASK,    ( signed portCHAR * ) "ROBOT4TASK",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
   xTaskCreate( TestTask,    ( signed portCHAR * ) "LED",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
+  //xTaskCreate( gotoPointTest,    ( signed portCHAR * ) "LED",      configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY+3, NULL );  
   vTaskStartScheduler();
   
   return 0;
